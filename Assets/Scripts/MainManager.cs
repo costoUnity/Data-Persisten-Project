@@ -3,9 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro;
 
 public class MainManager : MonoBehaviour
-{
+{ 
+
+    //To get the username
+    private string userName;
+
+    //Store the username to TextMeshProUGUI 
+    public TextMeshProUGUI bestScore_Name;
+
     public Brick BrickPrefab;
     public int LineCount = 6;
     public Rigidbody Ball;
@@ -73,4 +81,15 @@ public class MainManager : MonoBehaviour
         m_GameOver = true;
         GameOverText.SetActive(true);
     }
+
+    public void GetUserName(string playerInput)
+    {
+        userName = playerInput;
+        GameManager.Instance.namee = userName;
+        Debug.Log(userName);
+        bestScore_Name.text = "Name:" + GameManager.Instance.namee;
+
+    }
+
+   
 }
