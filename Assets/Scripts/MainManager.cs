@@ -6,7 +6,9 @@ using UnityEngine.UI;
 using TMPro;
 
 public class MainManager : MonoBehaviour
-{ 
+{
+    // UI loading Screen GameObject
+    public GameObject loadingScreen;
 
     //To get the username
     private string userName;
@@ -91,5 +93,14 @@ public class MainManager : MonoBehaviour
 
     }
 
+  public  void ToGameOnClick()
+    {
+        if(!string.IsNullOrEmpty(GameManager.Instance.namee))
+        {
+            loadingScreen.gameObject.SetActive(false);
+        }
+            
+        
+    }
    
 }
