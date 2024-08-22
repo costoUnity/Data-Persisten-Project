@@ -7,14 +7,19 @@ using TMPro;
 
 public class MainManager : MonoBehaviour
 {
+    //To get the bestscore
+    private int bestScore;
+
     // UI loading Screen GameObject
     public GameObject loadingScreen;
 
     //To get the username
     private string userName;
 
-    //Store the username to TextMeshProUGUI 
+    //Store the username and Best Score to TextMeshProUGUI 
     public TextMeshProUGUI bestScore_Name;
+    public TextMeshProUGUI bestScoreHolder;
+    public TextMeshProUGUI bestPlayerName;
 
     public Brick BrickPrefab;
     public int LineCount = 6;
@@ -27,11 +32,23 @@ public class MainManager : MonoBehaviour
     private int m_Points;
     
     private bool m_GameOver = false;
+    public bool loadingScreenOf = false;
 
     
     // Start is called before the first frame update
     void Start()
     {
+        if (!string.IsNullOrEmpty(GameManager.Instance.namee))
+        {
+            loadingScreen.gameObject.SetActive(false);
+            loadingScreenOf = true;
+             bestScore_Name.text = "Name:" + GameManager.Instance.namee;
+        }
+        // To Load the best Score
+        //bestScore = GameManager.Instance.TheBestScore;
+        GameManager.Instance.LoadName();
+        bestScoreHolder.text = "Best Score: " +GameManager.Instance.TheBestScore;
+        bestPlayerName.text = "Best Player: " + GameManager.Instance.namee;
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
         
@@ -52,7 +69,7 @@ public class MainManager : MonoBehaviour
     {
         if (!m_Started)
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Space) && loadingScreenOf)
             {
                 m_Started = true;
                 float randomDirection = Random.Range(-1.0f, 1.0f);
@@ -65,9 +82,24 @@ public class MainManager : MonoBehaviour
         }
         else if (m_GameOver)
         {
+            bestScore = m_Points;
+            if(bestScore > GameManager.Instance.TheBestScore)
+            {
+                GameManager.Instance.TheBestScore = bestScore;
+                bestScoreHolder.text = "Best Score " + GameManager.Instance.TheBestScore;
+                bestPlayerName.text = "Name:" + GameManager.Instance.namee;
+                GameManager.Instance.SaveName();
+            }
+            
+            
+            
+            
+            //GameManager.Instance.SaveName();
             if (Input.GetKeyDown(KeyCode.Space))
             {
+                
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                
             }
         }
     }
@@ -76,6 +108,7 @@ public class MainManager : MonoBehaviour
     {
         m_Points += point;
         ScoreText.text = $"Score : {m_Points}";
+       
     }
 
     public void GameOver()
@@ -95,9 +128,10 @@ public class MainManager : MonoBehaviour
 
   public  void ToGameOnClick()
     {
-        if(!string.IsNullOrEmpty(GameManager.Instance.namee))
+        if(!string.IsNullOrEmpty(userName))
         {
             loadingScreen.gameObject.SetActive(false);
+            loadingScreenOf = true;
         }
             
         

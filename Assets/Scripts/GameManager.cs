@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
     public string namee;
+    public int TheBestScore;
 
     public void Awake()
     {
@@ -23,17 +24,19 @@ public class GameManager : MonoBehaviour
     class SaveData
     {
         public string namee;
+        public int TheBestScore;
     }
 
-    void SaveName()
+ public    void SaveName()
     {
         SaveData data = new SaveData();
         data.namee = namee;
+        data.TheBestScore = TheBestScore;
         string json = JsonUtility.ToJson(data);
         File.WriteAllText(Application.persistentDataPath + "/Savefile.json", json);
     }
 
-    void LoadName()
+  public  void LoadName()
     {
         string path = Application.persistentDataPath + "/Savefile.json";
         if(File.Exists(path))
@@ -41,6 +44,7 @@ public class GameManager : MonoBehaviour
             string json = File.ReadAllText(path);
             SaveData data = JsonUtility.FromJson<SaveData>(json);
             namee = data.namee;
+            TheBestScore = data.TheBestScore;
         }
 
     }
